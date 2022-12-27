@@ -2,10 +2,15 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { getFollowing, apolloClient,getPublications, getPublicationsQueryVariables } from '../constants/lensConstants'
+import { useEffect, useState } from 'react'
+import { useMoralis } from 'react-moralis'
 
 let profileIdList = ["0x01517e"]
 
 export default function Home() {
+  const [pubs, setPubs] = useState();
+  const {account} = useMoralis();
+
   const getPublicationsList = async function () {
     let followers;
     let followingIds = [];
@@ -23,7 +28,17 @@ export default function Home() {
       variables: getPublicationsQueryVariables(profileIdList)
     });
     return publications;
-  }
+  };
+
+  useEffect(() => {
+      if(account) {
+      getPublicationsList().then((publications) => {
+        console.log(publications);
+        setPubs(publications);
+      })
+    }
+  }, [account]);
+
   return (
     <div className={styles.container}>
       Hello!
