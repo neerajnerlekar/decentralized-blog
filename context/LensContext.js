@@ -1,5 +1,5 @@
-import { useState, createContext, useContext } from "react";
-import { challenge, apolloClient, authenticate } from "../constants/lensConstans";
+import { useState, createContext, useContext, useEffect } from "react";
+import { challenge, apolloClient, authenticate } from "../constants/lensConstants";
 import { useMoralis } from "react-moralis";
 import { ethers } from "ethers";
 
@@ -20,9 +20,9 @@ export function LensProvider({children}) {
     const signIn = async function () {
         try {
             /* first request the challenge from the API server */
-            const challengeInfo = await ApolloClient.query({
+            const challengeInfo = await apolloClient.query({
                 query: challenge,
-                variable: {address: account}
+                variables: {address: account}
             })
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner()
@@ -44,6 +44,12 @@ export function LensProvider({children}) {
             console.log("Error signing in ", error)
         }
     }
+
+    useEffect(() => {
+        if(account && !token) {
+            signIn();
+        };
+    });
     return (
         <LensContext.Provider value={{profileId, token}}>
             {children}
