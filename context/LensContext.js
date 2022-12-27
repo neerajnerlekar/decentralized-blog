@@ -46,10 +46,23 @@ export function LensProvider({children}) {
     }
 
     useEffect(() => {
-        if(account && !token) {
+        const readToken = window.localStorage.getItem("lensToken");
+        if (readToken) {
+            setToken(readToken)
+        }
+        if(account && !token && !readToken) {
             signIn();
-        };
-    });
+        }
+        if(!account) {
+            window.localStorage.removeItem("lensToken");
+        }
+    }, [account]);
+
+    useEffect(() => {
+        if(token){
+            window.localStorage.setItem("lensToken", token)
+        }
+    }, [token]);
     return (
         <LensContext.Provider value={{profileId, token}}>
             {children}
