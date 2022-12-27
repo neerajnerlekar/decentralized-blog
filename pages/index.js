@@ -4,6 +4,7 @@ import styles from '../styles/Home.module.css'
 import { getFollowing, apolloClient,getPublications, getPublicationsQueryVariables } from '../constants/lensConstants'
 import { useEffect, useState } from 'react'
 import { useMoralis } from 'react-moralis'
+import PostFeed from '../components/PostFeed'
 
 let profileIdList = ["0x01517e"]
 
@@ -40,8 +41,9 @@ export default function Home() {
   }, [account]);
 
   return (
-    <div className={styles.container}>
-      Hello!
+    <div>
+      <div>Decentralized Blog!</div>
+      {!pubs ? <div> Loading...</div> : <PostFeed posts={pubs.data.publications.items}/>}
     </div>
   )
 }
