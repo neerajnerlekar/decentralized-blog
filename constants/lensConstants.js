@@ -29,3 +29,23 @@ export const authenticate = gql`
     }
   }
 `
+
+export const getDefaultProfile = gql`
+  query DefaultProfile($request: DefaultProfileRequest!) {
+    defaultProfile(request: $request) {
+      id
+    }
+  }
+`
+
+export const getFollowing = gql`
+query Query($request: FollowingRequest!) {
+  following(request: $request) {
+    items {
+      profile {
+        id
+      }
+    }
+  }
+}
+`

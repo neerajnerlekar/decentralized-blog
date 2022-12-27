@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { challenge, apolloClient, authenticate } from "../constants/lensConstants";
+import { challenge, apolloClient, authenticate, getDefaultProfile,} from "../constants/lensConstants";
 import { useMoralis } from "react-moralis";
 import { ethers } from "ethers";
 
@@ -11,7 +11,7 @@ export const useLensContext = () => {
 }
 
 export function LensProvider({children}) {
-    const [profileId, useProfileId ] = useState();
+    const [profileId, setProfileId ] = useState();
     const [token, setToken] = useState();
 
     // when we signed in using web3uikit, react-moralis kept a track of the connected account
@@ -45,6 +45,21 @@ export function LensProvider({children}) {
         }
     }
 
+    const getProfileId = async function () {
+        const defaultProfile = await apolloClient.query({
+            query: getDefaultProfile,
+            variables: {
+                request: {
+                    ethereumAddress: account,
+                },
+            },
+        });
+        if (defaultProfile.data.defaultProfile) {
+            console.log(defaultProfile.data.defaultProfile.id)
+            return defaultProfile.data.defaultProfile.id;
+        } return null;
+    }
+
     useEffect(() => {
         const readToken = window.localStorage.getItem("lensToken");
         if (readToken) {
@@ -56,6 +71,8 @@ export function LensProvider({children}) {
         if(!account) {
             window.localStorage.removeItem("lensToken");
         }
+        if (account) {
+            getProfileId().then((id) => setProfileId(id));        }
     }, [account]);
 
     useEffect(() => {
