@@ -49,3 +49,36 @@ query Query($request: FollowingRequest!) {
   }
 }
 `
+
+export const getPublications = gql`
+query Query($request: PublicationsQueryRequest!) {
+  publications(request: $request) {
+    items {
+      ... on Post {
+        id
+        onChainContentURI
+        profile {
+          name
+        }
+        metadata {
+          image
+          name
+        }
+      }
+    }
+  }
+}
+`
+
+export const getPublicationsQueryVariables = function(profileIds) {
+  return {
+    request: {
+      limit: 5,
+      publicationTypes: "POST",
+      metadata: {
+        mainContentFocus: "ARTICLE"
+      },
+      profileIds: profileIds
+    },
+  };
+};
