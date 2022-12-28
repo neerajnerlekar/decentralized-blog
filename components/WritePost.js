@@ -67,22 +67,22 @@ function PostForm() {
         console.log(fullContentURI);
         } else {
         const base64EncodedContent = encode(JSON.stringify(contentMetadata));
-        const fullContentURI = BASE_64_PREFIX + base64EncodedContent;
+        fullContentURI = BASE_64_PREFIX + base64EncodedContent;
         }
 
         // to the blockchain!
         const transactionParameters = [
             profileId,
             fullContentURI,
-            "0x23b9467334bEb345aAa6fd1545538F3d54436e96",
+            "0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c",
             TRUE_BYTES,
-            "0x17317F96f0C7a845FFe78c60B10aB15789b57Aaa",
+            "0x7Ea109eC988a0200A1F79Ae9b78590F92D357a16",
             TRUE_BYTES,
         ];
         console.log(transactionParameters);
         const transactionOptions = {
             abi: lensAbi,
-            contractAddress: "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d",
+            contractAddress: "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82",
             functionName: "post",
             params: {
                 vars: transactionParameters,
