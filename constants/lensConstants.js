@@ -1,4 +1,5 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+import {v4 as uuidv4 } from "uuid"
 
 const API_URL = 'https://api.lens.dev'
 
@@ -99,3 +100,24 @@ export const getPublicationsQueryVariables = function(profileIds) {
     },
   };
 };
+
+export const createContentMetadata = function (
+  content,
+  contentName,
+  imageUri,
+  imageType
+) {
+  return {
+    version: "2.0.0",
+    metadata_id: uuidv4(),
+    description: "Created from decentralizedBlog",
+    content: content,
+    name: contentName,
+    mainContentFocus: "ARTICLE",
+    attributes: [],
+    locale: "en-US",
+    appId: "lensBlog",
+    image: imageUri,
+    imageMimeType: imageType
+  }
+}
