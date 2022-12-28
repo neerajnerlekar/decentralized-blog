@@ -1,10 +1,13 @@
 import { ConnectButton } from "@web3uikit/web3"
+import Link from "next/link"
 
 
 export default function Navbar() {
     return (
         <ul>
-            <li>Home</li>
+            <Link href={`/`}>
+                <li>Home</li>
+            </Link>
             <li>Write Blog</li>
             <li>
                 <div>

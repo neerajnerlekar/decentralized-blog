@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { getPublication } from "../../constants/lensConstants";
+import PostContent from "../../components/PostContent";
 
 // Get some  possible paths
 export async function getStaticPaths() {
@@ -30,7 +31,7 @@ export default function ReadPost(props) {
         <div>
             { publication && publicationId && !loading ? 
             (
-              <div>Hi from publication!</div>
+              <div><PostContent post={publication.publication} /></div>
             ) : loading ? (
               <div> Loading.. </div> 
               )
