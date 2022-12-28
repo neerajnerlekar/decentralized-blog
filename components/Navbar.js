@@ -5,14 +5,16 @@ import Link from "next/link"
 export default function Navbar() {
     return (
         <ul>
-            <Link href={`/`}>
+            <Link href="/">
                 <li>Home</li>
             </Link>
-            <li>Write Blog</li>
+            <Link href="/write-blog">
+                <li>Write Blog</li>
+            </Link>
             <li>
                 <div>
                     <ConnectButton moralisAuth={false}/>
-                    Hello from Navbar!
+                    
                 </div>
             </li>
         </ul>
