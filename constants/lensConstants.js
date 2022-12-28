@@ -70,6 +70,23 @@ query Query($request: PublicationsQueryRequest!) {
 }
 `
 
+export const getPublication = gql`
+query Publication($request: PublicationQueryRequest!) {
+  publication(request: $request) {
+    ... on Post {
+      metadata {
+        content
+        image
+        name
+      }
+      profile {
+        name
+      }
+    }
+  }
+}
+`
+
 export const getPublicationsQueryVariables = function(profileIds) {
   return {
     request: {
