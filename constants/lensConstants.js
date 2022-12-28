@@ -110,16 +110,16 @@ export const createContentMetadata = function (
   return {
     version: "2.0.0",
     metadata_id: uuidv4(),
-    description: "Created from decentralizedBlog",
+    description: "Created from LensBlog",
     content: content,
     name: contentName,
     mainContentFocus: "ARTICLE",
     attributes: [],
     locale: "en-US",
-    appId: "lensBlog",
+    appId: "lensblog",
     image: imageUri,
-    imageMimeType: imageType
-  }
-}
+    imageMimeType: imageType,
+  };
+};
 
 export const TRUE_BYTES = "0x0000000000000000000000000000000000000000000000000000000000000001"

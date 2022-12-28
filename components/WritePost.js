@@ -3,34 +3,35 @@ import { useLensContext } from "../context/LensContext";
 import { createContentMetadata, TRUE_BYTES } from "../constants/lensConstants";
 import { useWeb3Contract } from "react-moralis";
 import lensAbi from "../lensAbi.json"
+import { encode } from "js-base64";
 
+const BASE_64_PREFIX = "data:application/json;base64,";
 const PINATA_PIN_ENDPOINT = "https://api.pinata.cloud/pinning/pinJSONToIPFS"
 
 async function pinMetadataToPinata(
-    metadata,
-    contentName,
-    pinataApiKey,
-    pinataApiSecret
+  metadata,
+  contentName,
+  pinataApiKey,
+  pinataApiSecret
 ) {
-    console.log("pinning metadata to pinata..");
-    const data = JSON.stringify({
-        pinataMetadata: { name: contentName },
-        pinataContent: metadata,
-    });
-    const config = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            pinata_api_key: pinataApiKey,
-            pinata_api_secret: pinataApiSecret,
-        },
-        body: data,
-    };
-
-    const response = await fetch(PINATA_PIN_ENDPOINT, config);
-    const ipfsHash = (await response.json()).IpfsHash;
-    console.log(`stored content metadata with ${ipfsHash}`);
-    return ipfsHash;
+  console.log("pinning metadata to pinata...");
+  const data = JSON.stringify({
+    pinataMetadata: { name: contentName },
+    pinataContent: metadata,
+  });
+  const config = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      pinata_api_key: pinataApiKey,
+      pinata_secret_api_key: pinataApiSecret,
+    },
+    body: data,
+  };
+  const response = await fetch(PINATA_PIN_ENDPOINT, config);
+  const ipfsHash = (await response.json()).IpfsHash;
+  console.log(`Stored content metadata with ${ipfsHash}`);
+  return ipfsHash;
 }
 
 function PostForm() {
@@ -48,26 +49,31 @@ function PostForm() {
         pinataApiKey,
         pinataApiSecret,
     }) {
-        let fullContentUri;
+        let fullContentURI;
         const contentMetadata = createContentMetadata(
-            content,
-            contentName,
-            imageUri,
-            imageType
+        content,
+        contentName,
+        imageUri,
+        imageType
         );
+        if (pinataApiSecret && pinataApiKey) {
         const metadataIpfsHash = await pinMetadataToPinata(
-            contentMetaData,
+            contentMetadata,
             contentName,
             pinataApiKey,
             pinataApiSecret
         );
-        fullContentUri = `ipfs://${metadataIpfsHash}`;
-        console.log(fullContentUri);
+        fullContentURI = `ipfs://${metadataIpfsHash}`;
+        console.log(fullContentURI);
+        } else {
+        const base64EncodedContent = encode(JSON.stringify(contentMetadata));
+        const fullContentURI = BASE_64_PREFIX + base64EncodedContent;
+        }
 
         // to the blockchain!
         const transactionParameters = [
             profileId,
-            fullContentUri,
+            fullContentURI,
             "0x23b9467334bEb345aAa6fd1545538F3d54436e96",
             TRUE_BYTES,
             "0x17317F96f0C7a845FFe78c60B10aB15789b57Aaa",
