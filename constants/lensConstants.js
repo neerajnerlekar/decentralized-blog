@@ -121,3 +121,5 @@ export const createContentMetadata = function (
     imageMimeType: imageType
   }
 }
+
+export const TRUE_BYTES = "0x0000000000000000000000000000000000000000000000000000000000000001"
