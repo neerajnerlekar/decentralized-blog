@@ -133,7 +133,7 @@ function PostForm() {
             {profileId && token ? (
                 <button type="submit">Publish</button>
             ) : (
-                <div>You need to sign in, or need a lens handle! </div>
+                <div>You need to sign in, and need a lens handle! </div>
             )}
         </form>
     )
